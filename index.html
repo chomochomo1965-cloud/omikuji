@@ -84,7 +84,7 @@ color:#b30000;
 
 <div id="result"></div>
 
-<audio id="win">
+<audio id="win" preload="auto">
 <source src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg">
 </audio>
 
@@ -140,6 +140,21 @@ ctx.restore()
 
 drawWheel()
 
+function playWin(){
+
+const win=document.getElementById("win")
+
+if(win.readyState>=2){
+
+win.pause()
+win.currentTime=0
+
+win.play().catch(()=>{})
+
+}
+
+}
+
 function spin(){
 
 const slice=360/fortunes.length
@@ -172,9 +187,7 @@ currentRotation=(currentRotation+totalRotation)%360
 
 document.getElementById("result").innerText="結果："+result
 
-const win=document.getElementById("win")
-win.currentTime=0
-win.play().catch(()=>{})
+playWin()
 
 }
 
