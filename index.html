@@ -7,12 +7,15 @@
 
 <title>神社おみくじ</title>
 
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d60000">
+
 <style>
 
 body{
 text-align:center;
 font-family:sans-serif;
-background:#fff5f5;
+background:linear-gradient(#fff5f5,#ffecec);
 margin:0;
 }
 
@@ -28,7 +31,7 @@ width:320px;
 height:320px;
 border-radius:50%;
 border:12px solid red;
-box-shadow:0 0 20px red;
+box-shadow:0 0 25px red;
 position:relative;
 }
 
@@ -74,8 +77,11 @@ color:#b30000;
 <h1>⛩ 神社おみくじ ⛩</h1>
 
 <div id="roulette">
+
 <div class="pointer">▼</div>
+
 <canvas id="wheel" width="320" height="320"></canvas>
+
 </div>
 
 <br>
@@ -84,11 +90,13 @@ color:#b30000;
 
 <div id="result"></div>
 
-<audio id="win" preload="auto">
-<source src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg">
-</audio>
+<audio id="win" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_115b9b0c67.mp3"></audio>
 
 <script>
+
+if('serviceWorker' in navigator){
+navigator.serviceWorker.register('sw.js')
+}
 
 const canvas=document.getElementById("wheel")
 const ctx=canvas.getContext("2d")
@@ -140,31 +148,20 @@ ctx.restore()
 
 drawWheel()
 
-function playWin(){
-
-const win=document.getElementById("win")
-
-if(win.readyState>=2){
-
-win.pause()
-win.currentTime=0
-
-win.play().catch(()=>{})
-
-}
-
-}
-
 function spin(){
 
 const slice=360/fortunes.length
+
 const index=Math.floor(Math.random()*fortunes.length)
+
 const result=fortunes[index]
 
 const stopAngle=270-(index*slice+slice/2)
+
 const totalRotation=360*6+stopAngle-currentRotation
 
 let start=null
+
 const duration=4000
 
 function animate(t){
@@ -172,9 +169,11 @@ function animate(t){
 if(!start)start=t
 
 const progress=t-start
+
 const ease=1-Math.pow(1-progress/duration,3)
 
 const rotate=currentRotation+totalRotation*ease
+
 canvas.style.transform="rotate("+rotate+"deg)"
 
 if(progress<duration){
@@ -187,7 +186,7 @@ currentRotation=(currentRotation+totalRotation)%360
 
 document.getElementById("result").innerText="結果："+result
 
-playWin()
+document.getElementById("win").play()
 
 }
 
