@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ルーレットサンプル</title>
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #111;
+  color: white;
+  padding: 20px;
+}
+#roulette {
+  width: 300px;
+  height: 300px;
+  margin: 20px auto;
+  border: 5px solid #fff;
+  border-radius: 50%;
+  position: relative;
+}
+#pointer {
+  width: 0; 
+  height: 0; 
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 30px solid red;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.segment {
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0% 0%;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  background: orange;
+}
+button {
+  font-size: 20px;
+  padding: 10px 20px;
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+
+<h1>ルーレットサンプル</h1>
+
+<div id="roulette">
+  <div id="pointer"></div>
+  <div class="segment" style="transform: rotate(0deg); background:#f44336;"></div>
+  <div class="segment" style="transform: rotate(60deg); background:#e91e63;"></div>
+  <div class="segment" style="transform: rotate(120deg); background:#9c27b0;"></div>
+  <div class="segment" style="transform: rotate(180deg); background:#3f51b5;"></div>
+  <div class="segment" style="transform: rotate(240deg); background:#03a9f4;"></div>
+  <div class="segment" style="transform: rotate(300deg); background:#4caf50;"></div>
+</div>
+
+<button onclick="spin()">回す</button>
+
+<script>
+function spin() {
+  let roulette = document.getElementById('roulette');
+  let deg = Math.floor(Math.random() * 360) + 720; // 2回転以上
+  roulette.style.transition = 'transform 3s ease-out';
+  roulette.style.transform = 'rotate(' + deg + 'deg)';
+  setTimeout(() => {
+    alert('結果はランダムです！');
+  }, 3000);
+}
+</script>
+
+</body>
+</html>
