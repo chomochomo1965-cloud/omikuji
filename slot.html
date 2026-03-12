@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🎰 新スロットおみくじ 🎰</title>
+<style>
+body{
+  text-align:center;
+  font-family:sans-serif;
+  background:linear-gradient(#fff5f5,#ffecec);
+  margin:0;
+}
+h1{
+  font-size:36px;
+  color:#b30000;
+  margin-top:20px;
+  text-shadow:1px 1px 2px gold;
+}
+.slot{
+  display:flex;
+  justify-content:center;
+  margin:40px auto;
+}
+.reel{
+  font-size:60px;
+  width:80px;
+  height:80px;
+  margin:0 5px;
+  border:2px solid red;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff0f0;
+  box-shadow:0 0 10px red inset;
+}
+button{
+  font-size:26px;
+  padding:15px 40px;
+  margin-top:20px;
+  background:#d60000;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  box-shadow:0 0 10px gold;
+}
+#result{
+  font-size:32px;
+  margin-top:20px;
+  color:#b30000;
+  white-space: pre-line;
+  text-shadow:1px 1px 2px gold;
+}
+</style>
+</head>
+<body>
+
+<h1>🎰 新スロットおみくじ 🎰</h1>
+
+<div class="slot">
+  <div id="reel1" class="reel">❔</div>
+  <div id="reel2" class="reel">❔</div>
+  <div id="reel3" class="reel">❔</div>
+</div>
+
+<button onclick="spin()">スピン</button>
+
+<div id="result"></div>
+
+<audio id="win" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_115b9b0c67.mp3"></audio>
+
+<script>
+// 絵柄5種類
+const symbols = ["7️⃣","3️⃣","🍒","🍋","⭐"];
+
+function playSound(){
+  const audio = document.getElementById("win");
+  audio.currentTime = 0;
+  audio.play();
+}
+
+function spin(){
+  const reels = [
+    document.getElementById("reel1"),
+    document.getElementById("reel2"),
+    document.getElementById("reel3")
+  ];
+
+  let count = 0;
+  const interval = setInterval(()=>{
+    for(let i=0;i<3;i++){
+      const symbol = symbols[Math.floor(Math.random()*symbols.length)];
+      // 7️⃣と3️⃣は赤文字、それ以外は黒文字
+      if(symbol==="7️⃣" || symbol==="3️⃣"){
+        reels[i].innerHTML = `<span style="color:red">${symbol}</span>`;
+      } else {
+        reels[i].innerHTML = symbol;
+      }
+    }
+    count++;
+    if(count>20){
+      clearInterval(interval);
+      const res = reels.map(r=>r.innerText); // 結果判定はinnerTextでOK
+      let message = "";
+      if(res[0]===res[1] && res[1]===res[2]){
+        message = "✨大当たり！ "+res[0]+"揃い✨";
+      } else if(res[0]===res[1] || res[1]===res[2] || res[0]===res[2]){
+        message = "ラッキー！ペア揃い😊";
+      } else {
+        message = "はずれ…😢";
+      }
+      document.getElementById("result").innerText = message;
+      playSound();
+    }
+  },100);
+}
+</script>
+
+</body>
+</html>
